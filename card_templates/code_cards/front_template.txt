@@ -1,78 +1,182 @@
-<!-- ===== CARD CONTENT & HINT ===== -->
-
-<div class="content_aligned";>
-
+<!-- CARD CONTENT & HINT -->
+<div class="content_aligned">
 	{{Front}}
-	<br>
-
+	
 	{{#Hint}}
-		<br>
-		<div id="hint" class="hidden">
-			<p class="trigger">[ click to show hint ]</p>
-			<p class="payload">{{Hint}}</p>
+		<div id="hint" class="hidden" role="button" tabindex="0" aria-label="Click to show hint">
+			<p class="trigger">💡 Click to show hint</p>
+			<div class="payload">{{Hint}}</div>
 		</div>
 	{{/Hint}}
+</div>
 
+<!-- TAGS SECTION -->
+<div class="tags-container">
+	<div class="tag-row">
+		<div id="ctag1" class="tag primary left"></div>
+		<a id="tag" href="{{URL}}" target="_blank" rel="noopener noreferrer">
+			<div id="stag1" class="tag primary right"></div>
+		</a>
+	</div>
+	
+	<div class="tag-row">
+		<div id="ctag2" class="tag secondary left"></div>
+		<div id="stag2" class="tag secondary right"></div>
+	</div>
+	
+	<div class="tag-row">
+		<div id="ctag3" class="tag tertiary left"></div>
+		<div id="stag3" class="tag tertiary right"></div>
+	</div>
 </div>
 
 
 
-<!-- ===== TAGS ===== -->
-
-<div id="ctag1" class="tag primary left"></div>
-<a id="tag" href={{URL}}><div id="stag1" class="tag primary right"></div></a>
-<br>
-
-<div id="ctag2" class="tag secondary left"></div>
-<div id="stag2" class="tag secondary right"></div>
-<br>
-
-<div id="ctag3" class="tag tertiary left"></div>
-<div id="stag3" class="tag tertiary right"></div>
-
-
-
-<!-- ===== JAVASCRIPT ===== -->
-
-<!-- inputs -->
+<!-- JAVASCRIPT -->
 <script>
-	var x = new Object();
-	var all = document.getElementsByTagName('input');
-	for (var i = 0; i < all.length; i++) {
-		all[i].addEventListener("input", function() { key=this.name; value=this.value; x[key] = value; });
-	}
-</script>
-
-<!-- tags -->
-<script>
-	tag_string = "{{Tags}}".split(" ");
-    tag_obj = {};
-    tag_string.forEach(tag => {
-    	tag_list = tag.split("::");
-        switch (tag_list[0]) {
-        	case "src": tag_obj["src"] = tag_list.slice(1); break;
-			case "content": tag_obj["content"] = tag_list.slice(1); break;
-        }
-    })
-    document.querySelector("#ctag1").textContent = tag_obj["content"][0].split("_").join(" ");
-    if (tag_obj["content"][1] !== undefined) { document.querySelector("#ctag2").textContent = tag_obj["content"][1].split("_").join(" "); }
-    if (tag_obj["content"][2] !== undefined) { document.querySelector("#ctag3").textContent = tag_obj["content"][2].split("_").join(" "); }
-    document.querySelector("#stag1").textContent = tag_obj["src"][0].split("_").join(" ");
-    if (tag_obj["src"][1] !== undefined) { document.querySelector("#stag2").textContent = tag_obj["src"][1].split("_").join(" "); }
-    if (tag_obj["src"][2] !== undefined) { document.querySelector("#stag3").textContent = tag_obj["src"][2].split("_").join(" "); }
-</script>
-
-<!-- hints -->
-<script>
-    var hint = document.getElementById('hint');
-    hint.addEventListener('touchstart', function() { this.setAttribute('class', 'shown'); });
-    hint.addEventListener('mousedown', function() { this.setAttribute('class', 'shown'); });
-</script>
-
-<!-- spoilers -->
-<script>
-	var all = document.querySelectorAll('.spoiler');
-	for (var i = 0; i < all.length; i++) {
-		all[i].addEventListener('click', function() { this.style.color = "white"; });
-	}
+	'use strict';
+	
+	// Input tracking system
+	const InputTracker = {
+		responses: new Map(),
+		
+		init() {
+			const inputs = document.querySelectorAll('input');
+			inputs.forEach(input => {
+				input.addEventListener('input', this.handleInput.bind(this));
+				input.addEventListener('focus', this.handleFocus);
+				input.addEventListener('blur', this.handleBlur);
+			});
+		},
+		
+		handleInput(event) {
+			const { name, value } = event.target;
+			this.responses.set(name, value);
+		},
+		
+		handleFocus(event) {
+			event.target.style.transform = 'scale(1.05)';
+		},
+		
+		handleBlur(event) {
+			event.target.style.transform = 'scale(1)';
+		},
+		
+		getResponse(key) {
+			return this.responses.get(key);
+		}
+	};
+	
+	// Tag management system
+	const TagManager = {
+		init() {
+			const tagString = "{{Tags}}";
+			if (!tagString.trim()) return;
+			
+			const tagObj = this.parseTagString(tagString);
+			this.renderTags(tagObj);
+		},
+		
+		parseTagString(tagString) {
+			const tags = tagString.split(' ').filter(tag => tag.trim());
+			const result = { content: [], src: [] };
+			
+			tags.forEach(tag => {
+				const parts = tag.split('::');
+				const type = parts[0];
+				const values = parts.slice(1);
+				
+				if (result.hasOwnProperty(type)) {
+					result[type] = values;
+				}
+			});
+			
+			return result;
+		},
+		
+		renderTags(tagObj) {
+			const formatTag = text => text?.split('_').join(' ') || '';
+			
+			// Content tags
+			const contentTags = ['ctag1', 'ctag2', 'ctag3'];
+			contentTags.forEach((id, index) => {
+				const element = document.getElementById(id);
+				if (element && tagObj.content[index]) {
+					element.textContent = formatTag(tagObj.content[index]);
+				}
+			});
+			
+			// Source tags
+			const sourceTags = ['stag1', 'stag2', 'stag3'];
+			sourceTags.forEach((id, index) => {
+				const element = document.getElementById(id);
+				if (element && tagObj.src[index]) {
+					element.textContent = formatTag(tagObj.src[index]);
+				}
+			});
+		}
+	};
+	
+	// Hint system
+	const HintManager = {
+		init() {
+			const hintElement = document.getElementById('hint');
+			if (!hintElement) return;
+			
+			hintElement.addEventListener('click', this.toggleHint);
+			hintElement.addEventListener('keydown', this.handleKeydown);
+			hintElement.addEventListener('touchstart', this.toggleHint, { passive: true });
+		},
+		
+		toggleHint(event) {
+			event.preventDefault();
+			const hint = event.currentTarget;
+			hint.classList.toggle('hidden');
+			hint.classList.toggle('shown');
+		},
+		
+		handleKeydown(event) {
+			if (event.key === 'Enter' || event.key === ' ') {
+				event.preventDefault();
+				this.toggleHint(event);
+			}
+		}
+	};
+	
+	// Spoiler system
+	const SpoilerManager = {
+		init() {
+			const spoilers = document.querySelectorAll('.spoiler');
+			spoilers.forEach(spoiler => {
+				spoiler.addEventListener('click', this.revealSpoiler);
+				spoiler.addEventListener('keydown', this.handleKeydown);
+				spoiler.setAttribute('tabindex', '0');
+				spoiler.setAttribute('role', 'button');
+				spoiler.setAttribute('aria-label', 'Click to reveal spoiler');
+			});
+		},
+		
+		revealSpoiler(event) {
+			event.target.style.color = 'white';
+			event.target.setAttribute('aria-label', 'Spoiler revealed');
+		},
+		
+		handleKeydown(event) {
+			if (event.key === 'Enter' || event.key === ' ') {
+				event.preventDefault();
+				this.revealSpoiler(event);
+			}
+		}
+	};
+	
+	// Initialize all systems when DOM is ready
+	document.addEventListener('DOMContentLoaded', () => {
+		InputTracker.init();
+		TagManager.init();
+		HintManager.init();
+		SpoilerManager.init();
+	});
+	
+	// Export for back template
+	window.x = InputTracker.responses;
 </script>

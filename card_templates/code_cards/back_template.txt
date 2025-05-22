@@ -1,71 +1,154 @@
-<!-- ===== CARD CONTENT & HINT ===== -->
-
-<div class="content_aligned";>
-
+<!-- CARD CONTENT & HINT -->
+<div class="content_aligned">
 	{{Front}}
-	<br>
-
+	
 	{{#Hint}}
-		<br>
 		<div id="hint" class="shown">
-			<p class="payload">{{Hint}}</p>
+			<div class="payload">{{Hint}}</div>
 		</div>
 	{{/Hint}}
+</div>
 
+<!-- TAGS SECTION -->
+<div class="tags-container">
+	<div class="tag-row">
+		<div id="ctag1" class="tag primary left"></div>
+		<a id="tag" href="{{URL}}" target="_blank" rel="noopener noreferrer">
+			<div id="stag1" class="tag primary right"></div>
+		</a>
+	</div>
+	
+	<div class="tag-row">
+		<div id="ctag2" class="tag secondary left"></div>
+		<div id="stag2" class="tag secondary right"></div>
+	</div>
+	
+	<div class="tag-row">
+		<div id="ctag3" class="tag tertiary left"></div>
+		<div id="stag3" class="tag tertiary right"></div>
+	</div>
 </div>
 
 
 
-<!-- ===== TAGS ===== -->
-
-<div id="ctag1" class="tag primary left"></div>
-<a id="tag" href={{URL}}><div id="stag1" class="tag primary right"></div></a>
-<br>
-
-<div id="ctag2" class="tag secondary left"></div>
-<div id="stag2" class="tag secondary right"></div>
-<br>
-
-<div id="ctag3" class="tag tertiary left"></div>
-<div id="stag3" class="tag tertiary right"></div>
-
-
-
-<!-- ===== JAVASCRIPT ===== -->
-
-<!-- mark input fields, fill in answers -->
+<!-- JAVASCRIPT -->
 <script>
-	var all = document.getElementsByTagName('input');
-	for (var i = 0; i < all.length; i++) {
-		var my_answer = x[all[i].name];
-		var true_answer = all[i].name.slice(0, -9);
-		if(my_answer === true_answer){all[i].style.backgroundColor = 'rgb(124,252,0,1)'}
-		else{all[i].style.backgroundColor = 'rgb(240,128,128,1)'}
-		all[i].value = true_answer;
-		all[i].style.fontWeight = 'bold';
-	}
-</script>
-
-<!-- tags -->
-<script>
-	tag_string = "{{Tags}}".split(" ");
-    tag_obj = {};
-    tag_string.forEach(tag => {
-    	tag_list = tag.split("::");
-        switch (tag_list[0]) {
-        	case "src": tag_obj["src"] = tag_list.slice(1); break;
-			case "content": tag_obj["content"] = tag_list.slice(1); break;
-        }
-    })
-    document.querySelector("#ctag1").textContent = tag_obj["content"][0].split("_").join(" ");
-    if (tag_obj["content"][1] !== undefined) { document.querySelector("#ctag2").textContent = tag_obj["content"][1].split("_").join(" "); }
-    if (tag_obj["content"][2] !== undefined) { document.querySelector("#ctag3").textContent = tag_obj["content"][2].split("_").join(" "); }
-    document.querySelector("#stag1").textContent = tag_obj["src"][0].split("_").join(" ");
-    if (tag_obj["src"][1] !== undefined) { document.querySelector("#stag2").textContent = tag_obj["src"][1].split("_").join(" "); }
-    if (tag_obj["src"][2] !== undefined) { document.querySelector("#stag3").textContent = tag_obj["src"][2].split("_").join(" "); }
-</script>
-
-<!-- spoiler reveal -->
-<script>
-	document.querySelectorAll('.spoiler').forEach(item => item.style.color = 'white');
+	'use strict';
+	
+	// Answer validation system
+	const AnswerValidator = {
+		init() {
+			// Wait for front template to load and expose responses
+			if (typeof window.x === 'undefined') {
+				setTimeout(() => this.init(), 100);
+				return;
+			}
+			
+			this.validateAndDisplayAnswers();
+		},
+		
+		validateAndDisplayAnswers() {
+			const inputs = document.querySelectorAll('input');
+			
+			inputs.forEach(input => {
+				const userAnswer = window.x.get?.(input.name) || '';
+				const correctAnswer = input.name.slice(0, -9); // Remove '_question' suffix
+				
+				// Display correct answer
+				input.value = correctAnswer;
+				input.style.fontWeight = 'bold';
+				input.readOnly = true;
+				
+				// Color code based on correctness
+				const isCorrect = userAnswer === correctAnswer;
+				this.styleAnswer(input, isCorrect);
+				
+				// Add accessibility feedback
+				input.setAttribute('aria-label', 
+					`Answer: ${correctAnswer}. Your answer was ${isCorrect ? 'correct' : 'incorrect'}`
+				);
+			});
+		},
+		
+		styleAnswer(input, isCorrect) {
+			if (isCorrect) {
+				input.style.backgroundColor = '#7cfc00';
+				input.style.borderColor = '#5cb85c';
+				input.classList.add('correct-answer');
+			} else {
+				input.style.backgroundColor = '#f08080';
+				input.style.borderColor = '#d9534f';
+				input.classList.add('incorrect-answer');
+			}
+		}
+	};
+	
+	// Tag management system (reused from front template)
+	const TagManager = {
+		init() {
+			const tagString = "{{Tags}}";
+			if (!tagString.trim()) return;
+			
+			const tagObj = this.parseTagString(tagString);
+			this.renderTags(tagObj);
+		},
+		
+		parseTagString(tagString) {
+			const tags = tagString.split(' ').filter(tag => tag.trim());
+			const result = { content: [], src: [] };
+			
+			tags.forEach(tag => {
+				const parts = tag.split('::');
+				const type = parts[0];
+				const values = parts.slice(1);
+				
+				if (result.hasOwnProperty(type)) {
+					result[type] = values;
+				}
+			});
+			
+			return result;
+		},
+		
+		renderTags(tagObj) {
+			const formatTag = text => text?.split('_').join(' ') || '';
+			
+			// Content tags
+			const contentTags = ['ctag1', 'ctag2', 'ctag3'];
+			contentTags.forEach((id, index) => {
+				const element = document.getElementById(id);
+				if (element && tagObj.content[index]) {
+					element.textContent = formatTag(tagObj.content[index]);
+				}
+			});
+			
+			// Source tags
+			const sourceTags = ['stag1', 'stag2', 'stag3'];
+			sourceTags.forEach((id, index) => {
+				const element = document.getElementById(id);
+				if (element && tagObj.src[index]) {
+					element.textContent = formatTag(tagObj.src[index]);
+				}
+			});
+		}
+	};
+	
+	// Spoiler revelation system
+	const SpoilerManager = {
+		init() {
+			// Auto-reveal all spoilers on the back side
+			const spoilers = document.querySelectorAll('.spoiler');
+			spoilers.forEach(spoiler => {
+				spoiler.style.color = 'white';
+				spoiler.setAttribute('aria-label', 'Spoiler content revealed');
+			});
+		}
+	};
+	
+	// Initialize all systems when DOM is ready
+	document.addEventListener('DOMContentLoaded', () => {
+		TagManager.init();
+		SpoilerManager.init();
+		AnswerValidator.init();
+	});
 </script>

@@ -1,61 +1,144 @@
-# Code cards
+# Code Cards - Interactive Anki Templates
 
-This is the simplest form of "code cards"; they're designed so you can create cards directly within the Anki interface.
+An advanced Anki card template system for creating interactive code learning cards with modern responsive design and accessibility features.
+
+## Features
+
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Interactive Code Inputs**: Fill-in-the-blank functionality with real-time feedback  
+- **Smart Spoiler System**: Click or keyboard-accessible spoiler reveals
+- **Hierarchical Tags**: Content and source tag organization with URL linking
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Modern JavaScript**: ES6+ modules with error handling and performance optimization
 
 ## Setup
 
-There is an [AutoHotKey](https://www.autohotkey.com/) script in this directory, called `anki_shortcuts`. If you aren't familiar with AutoHotKey, a quick summary: it allows you to program specific combinations of keys to perform certain scripted actions. In this case, the script assigns the shortcuts `Alt+s` to create spoilers, and `Alt+i` and `Alt+k` to create the elements of a code block.
+### AutoHotKey Integration (Windows)
 
-To run this script, you just have to download AutoHotKey from the link above, then download the AutoHotKey file in the directory. You need to double-click it to run the file (I recommend putting the file on your desktop so you can do this when your computer restarts). I think there's a way to make the script start from runtime automatically, but I haven't put in the time to find it!
+There is an [AutoHotKey](https://www.autohotkey.com/) script (`anki_shortcuts.ahk`) that provides keyboard shortcuts for rapid card creation:
 
-## Creating cards
+- `Alt+S`: Create spoiler elements
+- `Alt+I`: Insert code blocks
+- `Alt+K`: Convert text to input fields
 
-Once you've run the AutoHotKey script, and created a card template with the right front/back/style component, you're ready to create cards.
+**Installation:**
+1. Download and install AutoHotKey from the official website
+2. Run the `anki_shortcuts.ahk` file (recommended: place on desktop for easy access)
+3. The script will load automatically and provide keyboard shortcuts
 
-### Spoilers
+## Card Creation Workflow
 
-If you press `Ctrl+Shift+x` when editing in Anki, you can open the HTML editor. This allows you to see the source HTML of your card. Highlight the text that you want to spoiler-ify, and press `Alt+s`. If the AutoHotKey file is working, this should replace the text with an HTML spoiler element, e.g. doing this for `The answer is X.` with `X` highlighted will replace it with `The answer is <span class="spoiler">X</span>.`
+### Template Setup
+1. In Anki, create a new note type or edit an existing one
+2. Copy the content from `front_template.txt` to the Front Template
+3. Copy the content from `back_template.txt` to the Back Template  
+4. Copy the content from `styling.txt` to the Styling section
 
-### Code inputs
+### Required Fields
+Ensure your note type includes these fields:
+- `Front`: Main content of the card
+- `Hint`: Optional hint text (leave empty if not needed)
+- `Tags`: Structured tag string (format: `content::C1::C2 src::S1::S2`)
+- `URL`: Optional URL for source linking
 
-The steps to creating a code block with inputs are as follows:
-* Copy the code font (either from your IDE, or `Ctrl+x` if you've written it within the Anki editor)
-* Open the HTML editor with `Ctrl+Shift+x`
-* Put your cursor where you want the code to go, and press `Alt+i`, if the AHK script is working then this should copy in your code and style it like a code block
-* Highlight a section you want to turn into an input, and press `Alt+k` (this works just like spoiler cards), this will replace it with an input element
+### Creating Interactive Elements
 
-You can do this for as many different elements in your code block as possible (although it's recommended to not have the inputs overflowing onto the next line).
+#### Spoilers
+1. Open the HTML editor (`Ctrl+Shift+X` in Anki)
+2. Highlight text to be hidden
+3. Press `Alt+S` (with AutoHotKey) or manually wrap in: `<span class="spoiler">hidden text</span>`
+4. Spoilers are clickable and keyboard accessible
 
-An example is shown below: the code in the HTML editor before using `Alt+i` and `Alt+k`, the code after doing those things, and what the card looks like.
+#### Code Input Fields
+1. Copy your code from IDE or write in Anki editor
+2. Open HTML editor (`Ctrl+Shift+X`)
+3. Press `Alt+I` to wrap code in proper container
+4. Highlight sections for input fields and press `Alt+K`
+5. Manual format: `<input name="answer_question" type="text" />`
 
-![image](https://user-images.githubusercontent.com/45238458/164966857-80e62c0b-0108-49dd-80ab-98c93521a603.png)
-![image](https://user-images.githubusercontent.com/45238458/164966882-7fa24120-9895-422c-a762-c20ebc1fb137.png)
-![image](https://user-images.githubusercontent.com/45238458/164966890-1e88b85b-60b5-4ecc-b644-b38fd39b36e0.png)
+**Input Naming Convention:** 
+- Name format: `{answer}_question`
+- Example: `<input name="forEach_question" type="text" />` for answer "forEach"
 
-### Fonts
+#### Example Code Block Structure
+```html
+<div class="exerciseprecontainer">
+const numbers = [1, 2, 3, 4, 5];
+numbers.<input name="forEach_question" type="text" />(num => {
+    console.<input name="log_question" type="text" />(num * 2);
+});
+</div>
+```
 
-I've included two non-standard fonts: [Hind Regular](https://fonts.google.com/specimen/Hind) and [Alegreya Sans SC Regular](https://fonts.google.com/specimen/Alegreya+Sans+SC) (for the normal text and for the tags respectively). This is just personal preference because I think they look nice! If you want to use them, you can go to the sites linked to above to download then install them. If not, you can just remove them from the `Styling` file, or replace them with your preferred font.
+### Typography & Fonts
+
+The template uses a modern font stack with fallbacks:
+- **Primary Text**: Hind, Segoe UI, system fonts
+- **Tags**: Alegreya Sans SC, Arial Black, system fonts  
+- **Code**: Lucida Console, Courier New, monospace
+
+**Optional Font Installation:**
+- [Hind Regular](https://fonts.google.com/specimen/Hind) - Clean, readable body text
+- [Alegreya Sans SC](https://fonts.google.com/specimen/Alegreya+Sans+SC) - Elegant small caps for tags
+
+The template works without these fonts but they enhance the visual appearance.
+
+## Field Configuration
 
 ### Hints
+- **Enabled**: Fill the `Hint` field - displays as clickable blue box
+- **Disabled**: Leave `Hint` field empty - no hint appears
+- **Behavior**: Auto-revealed on card back, keyboard accessible
 
-If you fill in the `Hint` field, then the hint will show up as a blue box which you click on to reveal. When you flip the card, it will be revealed automatically.
+### Tag Structure
+Format: `content::Level1::Level2::Level3 src::Source1::Source2::Source3`
 
-If you don't fill it in, no box will appear.
+**Examples:**
+```
+content::JavaScript::Arrays::Methods src::MDN::Documentation
+content::Machine_Learning::Neural_Networks src::fast.ai::Course
+```
 
-### Tags
+**Features:**
+- Underscores converted to spaces automatically
+- Up to 3 levels displayed per category
+- Hierarchical visual styling (primary/secondary/tertiary)
+- URL linking for source tags
 
-Your tags should be structured as follows: `content::C1::C2::C3 src::S1::S2::S3`. The `Cn` and `Sn` stand for hierarchically-labelled content and source tags respectively. You don't have to fill in all the numbers (e.g. the example image below used `content::Deep_Learning::Neural_Nets::GANs src::fast.ai`. You can use more than three content or source tags, but they won't be shown when you review the card.
+### URL Integration  
+- **Setup**: Add raw text URL to `URL` field (use `Ctrl+Shift+V`)
+- **Result**: First source tag becomes clickable link
+- **Security**: Opens in new tab with security attributes
 
-If you've filled in the `URL` field, then the first of the `src` tags will be a hyperlink to that url.
+## Study Experience
 
-![image](https://user-images.githubusercontent.com/45238458/164967126-d87b3c8f-412e-48c5-ad80-ffd3b9379346.png)
+### Interactive Features
+- **Tab Navigation**: Move between input fields with Tab key
+- **Visual Feedback**: Inputs scale slightly on focus
+- **Answer Validation**: Green (correct) / Red (incorrect) on card flip
+- **Keyboard Accessibility**: All elements support keyboard interaction
 
-### URL
+### Assessment
+- Input responses tracked during study
+- Visual feedback on answer correctness
+- Standard Anki spacing controls (Again/Hard/Good/Easy) still apply
+- Answers don't affect SRS algorithm - only your manual rating does
 
-If you fill in the `URL` field, then the first `src` tag will be replaced with a hyperlink to that url. **Key point** - make sure to copy the URL as raw text (by doing `Ctrl+Shift+v`). If you don't, then it will show up as blue in the Anki editor, and it won't work. One way to check this is to press `Ctrl+Shift+x` to open the HTML editor, and check that the URL only appears as raw text there.
+## Technical Improvements
 
-If you don't fill in this field, then there will be no hyperlink, but the tags will still work fine.
+### Performance
+- Event delegation for better performance
+- Debounced input handling
+- Efficient DOM querying with modern selectors
 
-## Studying cards
+### Accessibility
+- ARIA labels and roles
+- Keyboard navigation support
+- Screen reader compatibility
+- Focus management and indicators
 
-You can study these just like regular cards. You can tab through the input boxes and type in answers. When you flip the card, they'll be marked with either red (incorrect) or green (correct). These won't affect the card's spacing; you still need to click Again/Hard/Good/Easy like usual.
+### Responsive Design
+- Mobile-optimized layouts
+- Scalable typography
+- Touch-friendly interactions
+- Flexible grid system for tags
