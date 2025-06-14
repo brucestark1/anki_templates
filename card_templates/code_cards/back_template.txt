@@ -48,6 +48,8 @@
 		const sanitized_my_answer = my_answer
 			.replaceAll('“', '"')
 			.replaceAll('”', '"')
+			.replaceAll('‘', '\'')
+			.replaceAll('’', '\'')
 			.replaceAll(/\s+/g,'');
 		const true_answer = inputElements[i].name;
 		const sanitized_true_answer = true_answer.replaceAll(' ','');
