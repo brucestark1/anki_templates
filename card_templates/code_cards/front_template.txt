@@ -1,6 +1,6 @@
 <!-- ===== CARD CONTENT & HINT ===== -->
 
-<div class="content_aligned";>
+<div class="content_aligned">
 
 	{{Front}}
 	<br>
@@ -37,10 +37,14 @@
 <!-- inputs -->
 <script>
 	var x = new Object();
-	var all = document.getElementsByTagName('input');
-	for (var i = 0; i < all.length; i++) {
-		all[i].addEventListener("input", function() { key=this.name; value=this.value; x[key] = value; });
+	var inputElements = document.getElementsByTagName('input');
+	for (var i = 0; i < inputElements.length; i++) {
+		var elem = inputElements[i];
+		elem.addEventListener("input", () => { x[elem.name] = elem.value; });
 	}
+
+  // automatically place cursor onto first input field
+  if (inputElements[0]) inputElements[0].focus();
 </script>
 
 <!-- tags -->
