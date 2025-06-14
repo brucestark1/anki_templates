@@ -36,15 +36,23 @@
 
 <!-- inputs -->
 <script>
-	var x = new Object();
-	var inputElements = document.getElementsByTagName('input');
-	for (var i = 0; i < inputElements.length; i++) {
-		var elem = inputElements[i];
-		elem.addEventListener("input", () => { x[elem.name] = elem.value; });
-	}
+    function storeInput() {
+        const data = {};
+        const inputElements = document.getElementsByTagName('input');
+        for (let i = 0; i < inputElements.length; i++) {
+            const elem = inputElements[i];
+            elem.addEventListener("input", () => { data[elem.name] = elem.value; });
+        }
+        return data;
+    }
 
-  // automatically place cursor onto first input field
-  if (inputElements[0]) inputElements[0].focus();
+    // automatically place cursor onto first input field
+    function placeCursor() {
+      const firstElement = document.getElementsByTagName('input')[0];
+      if (firstElement) firstElement.focus();
+    }
+	window._data = storeInput();
+	placeCursor();
 </script>
 
 <!-- tags -->
@@ -68,15 +76,18 @@
 
 <!-- hints -->
 <script>
-    var hint = document.getElementById('hint');
-    hint.addEventListener('touchstart', function() { this.setAttribute('class', 'shown'); });
-    hint.addEventListener('mousedown', function() { this.setAttribute('class', 'shown'); });
+    function setupHints() {
+        const hint = document.getElementById('hint');
+        hint.addEventListener('touchstart', function() { this.setAttribute('class', 'shown'); });
+        hint.addEventListener('mousedown', function() { this.setAttribute('class', 'shown'); });
+    }
+    setupHints();
 </script>
 
 <!-- spoilers -->
 <script>
 	var all = document.querySelectorAll('.spoiler');
-	for (var i = 0; i < all.length; i++) {
+	for (let i = 0; i < all.length; i++) {
 		all[i].addEventListener('click', function() { this.style.color = "white"; });
 	}
 </script>

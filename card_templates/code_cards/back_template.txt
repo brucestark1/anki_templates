@@ -40,23 +40,27 @@
 
 <!-- mark input fields, fill in answers -->
 <script>
-	var all = document.getElementsByTagName('input');
-	for (var i = 0; i < all.length; i++) {
-		var my_answer = x[all[i].name];
+	var inputElements = document.getElementsByTagName('input');
+	for (let i = 0; i < inputElements.length; i++) {
+		const my_answer = window._data[inputElements[i].name];
 
-		<!-- replace smart quotes with normal quotes and remove all whitespace -->
-		var sanitized_my_answer = my_answer
+		// replace smart quotes with normal quotes and remove all whitespace
+		const sanitized_my_answer = my_answer
 			.replaceAll('“', '"')
 			.replaceAll('”', '"')
 			.replaceAll(/\s+/g,'');
-		var true_answer = all[i].name;
-		var sanitized_true_answer = true_answer.replaceAll(' ','');
+		const true_answer = inputElements[i].name;
+		const sanitized_true_answer = true_answer.replaceAll(' ','');
 
 
-		if(sanitized_my_answer === sanitized_true_answer){all[i].style.backgroundColor = 'rgb(124,232,0,1)'}
-		else{all[i].style.backgroundColor = 'rgb(240,128,128,1)'}
-		all[i].value = true_answer;
-		all[i].style.fontWeight = 'bold';
+		if(sanitized_my_answer === sanitized_true_answer) {
+		    inputElements[i].style.backgroundColor = 'rgb(124,232,0,1)'
+		} else {
+		    inputElements[i].style.backgroundColor = 'rgb(240,128,128,1)'
+		}
+
+		inputElements[i].value = true_answer;
+		inputElements[i].style.fontWeight = 'bold';
 	}
 </script>
 
