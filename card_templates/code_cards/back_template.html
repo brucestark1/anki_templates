@@ -1,17 +1,15 @@
-<!-- ===== CARD CONTENT, HINT, TAGS & URL ===== -->
-
+<!-------- Card Content, Hint, Tags and URL -------->
 <div class="content_aligned">
-
-    <!------- Content & Hint ------->
-
+    <!------- Content and Hint ------->
     {{Front}}
+
+    <br>
+    {{#Hint}}
     <br>
 
-    {{#Hint}}
-        <br>
-        <div id="hint" class="shown">
-            <p class="payload">{{Hint}}</p>
-        </div>
+    <div id="hint" class="shown">
+        <p class="payload">{{Hint}}</p>
+    </div>
     {{/Hint}}
 
     {{#Back}}
@@ -23,64 +21,56 @@
     <br>
 </div>
 
-<!------- TAGS & URL ------->
-
+<!------- Tags and URL ------->
 <div id="primary-tag-container" style="position: absolute; bottom: 0; left: 11%;">
-    <div id="ctag1" class="tag primary left"></div>
-        <div id="ctag2" class="tag secondary left"></div>
-        <div id="ctag3" class="tag tertiary left"></div>
+    <div id="content_tag_left" class="tag primary left"></div>
 </div>
 
 <div id="url-container" style="position: absolute; bottom: 0; right: 11%;">
-        {{URL}}
+    {{URL}}
 </div>
 
 
-<!-- ===== JAVASCRIPT ===== -->
-
-<!-- mark input fields, fill in answers -->
+<!-------- JavaScript -------->
 <script>
-    var inputs = document.getElementsByTagName('input');
-    for (let i = 0; i < inputs.length; i++) {
-        const true_answer = inputs[i].name ?? '';
-        const expected = true_answer.replaceAll(' ','');
-
-        const my_answer = window._data[inputs[i].name] ?? '';
-
-        // strip all whitespace and convert smart quotes to normal quotes
-        const actual = my_answer
-                .replaceAll('“', '"')
-                .replaceAll('”', '"')
-                .replaceAll('‘', '\'')
-                .replaceAll('’', '\'')
-                .replaceAll(/\s+/g,'');
-
-        if(actual === expected) {
-            inputs[i].style.backgroundColor = 'rgb(124,232,0,1)'
-        } else {
-            inputs[i].style.backgroundColor = 'rgb(240,128,128,1)'
-        }
-
-        inputs[i].value = true_answer;
-        inputs[i].style.fontWeight = 'bold';
+    // normalises smart quotes and strips all whitespace
+    function parseInput(str) {
+        return str.replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/\s+/g, "");
     }
-</script>
 
-<!-- tags -->
-<script>
-    tag_string = "{{Tags}}".split(" ");
-    tag_obj = {};
-    tag_string.forEach(tag => {
-        tag_list = tag.split("::");
-        switch (tag_list[0]) {
-            default: tag_obj["content"] = tag_list; break;
-        }
-    })
-    document.querySelector("#ctag1").textContent = tag_obj["content"].join(" - ").split("_").join(" ");
-</script>
+    // displays each input as correct (green) or wrong (red) based on whether the normalised answer matches expected
+    function checkAnswer(data) {
+        document.querySelectorAll("input").forEach(input => {
+            const trueAnswer = input.name ?? "";
+            const expected = trueAnswer.replace(/\s+/g, "");
+            const actual = parseInput((data[input.name] ?? ""));
 
+            input.style.backgroundColor = actual === expected ? "rgb(124,232,0,1)" : "rgb(240,128,128,1)";
 
-<!-- URL -->
-<script>
-    document.querySelector("a").textContent = "Link"
+            input.value = trueAnswer;
+            input.style.fontWeight = "bold";
+        });
+    }
+
+    // parses a space delimited tag string, extracts “content” tags, and displays them in #content_tag_left
+    function displayTags() {
+        const tags = "{{Tags}}".split(" ");
+        let content = [];
+        tags.forEach(tag => {
+            const pieces = tag.split("::");
+            if (pieces[0] === "content") content = pieces;
+        });
+        const elem = document.querySelector("#content_tag_left");
+        if (elem) elem.textContent = content.join(" - ").replace(/_/g, " ");
+    }
+
+    // set link text with similar formatting and colour scheme used in anki for consistent experience
+    function setLinkText() {
+        const anchor = document.querySelector("a");
+        if (anchor) anchor.textContent = "Link";
+    }
+
+    checkAnswer(window.data);
+    displayTags();
+    setLinkText();
 </script>

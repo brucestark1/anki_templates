@@ -1,29 +1,25 @@
-<!-- ===== CARD CONTENT, HINT, TAGS & URL ===== -->
-
+<!-------- Card Content, Hint, Tags and URL -------->
 <div class="content_aligned">
-
-    <!------- Content & Hint ------->
-
+    <!------- Content and Hint ------->
     {{Front}}
+
     <br>
 
     {{#Hint}}
-        <br>
-        <div id="hint" class="hidden">
-            <p class="trigger">[ click to show hint ]</p>
-            <p class="payload">{{Hint}}</p>
-        </div>
+    <br>
+    <div id="hint" class="hidden">
+        <p class="trigger">Click to show hint</p>
+        <p class="payload">{{Hint}}</p>
+    </div>
     {{/Hint}}
 
 </div>
 
 
-<!------- TAGS & URL ------->
 
+<!------- Tags and URL ------->
 <div id="primary-tag-container" style="position: absolute; bottom: 0; left: 11%;">
-    <div id="ctag1" class="tag primary left"></div>
-    <div id="ctag2" class="tag secondary left"></div>
-    <div id="ctag3" class="tag tertiary left"></div>
+    <div id="content_tag_left" class="tag primary left"></div>
 </div>
 
 <div id="url-container" style="position: absolute; bottom: 0; right: 11%;">
@@ -32,52 +28,53 @@
 
 
 
-
-<!-- ===== JAVASCRIPT ===== -->
-
-<!-- inputs -->
+<!-------- JavaScript -------->
 <script>
+    // store all input values into an object
     function storeInput() {
         const data = {};
-        const inputElements = document.getElementsByTagName('input');
-        for (let i = 0; i < inputElements.length; i++) {
-            const elem = inputElements[i];
+        document.querySelectorAll("input").forEach(elem => {
             elem.addEventListener("input", () => { data[elem.name] = elem.value; });
-        }
+        });
         return data;
     }
 
-    // automatically place cursor onto first input field
+    // automatically place cursor onto first input field if it exists
     function placeCursor() {
-      const firstElement = document.getElementsByTagName('input')[0];
+      const firstElement = document.getElementsByTagName("input")[0];
       if (firstElement) firstElement.focus();
     }
-    window._data = storeInput();
-    placeCursor();
-</script>
 
-
-<!-- hints -->
-<script>
-    var hint = document.getElementById('hint');
-    hint.addEventListener('touchstart', function() { this.setAttribute('class', 'shown'); });
-    hint.addEventListener('mousedown', function() { this.setAttribute('class', 'shown'); });
-</script>
-
-<!-- tags -->
-<script>
-    tag_string = "{{Tags}}".split(" ");
-    tag_obj = {};
-    tag_string.forEach(tag => {
-        tag_list = tag.split("::");
-        switch (tag_list[0]) {
-            default: tag_obj["content"] = tag_list; break;
+    // attach touch and mouse event listeners to reveal the hint element when triggered
+    function setupHint() {
+        const hint = document.getElementById("hint");
+        if (hint) {
+            hint.addEventListener("touchstart", () => hint.className = "shown");
+            hint.addEventListener("mousedown", () => hint.className = "shown");
         }
-    })
-    document.querySelector("#ctag1").textContent = tag_obj["content"].join(" - ").split("_").join(" ");
-</script>
+    }
 
-<!-- URL -->
-<script>
-    document.querySelector("a").textContent = "Link"
+    // parses a space delimited tag string, extracts “content” tags, and displays them in #content_tag_left
+    function displayTags() {
+        const tags = "{{Tags}}".split(" ");
+        let content = [];
+        tags.forEach(tag => {
+            const pieces = tag.split("::");
+            if (pieces[0] === "content") content = pieces;
+        });
+        const elem = document.querySelector("#content_tag_left");
+        if (elem) elem.textContent = content.join(" - ").replace(/_/g, " ");
+    }
+
+    // set link text with similar formatting and colour scheme used in anki for consistent experience
+    function setLinkText() {
+        const anchor = document.querySelector("a");
+        if (anchor) anchor.textContent = "Link";
+    }
+
+    window.data = storeInput();
+    placeCursor();
+    setupHint();
+    displayTags("{{Tags}}");
+    setLinkText();
 </script>
