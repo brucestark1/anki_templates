@@ -56,9 +56,10 @@
 
 /*  URL  */
 a {
-  color: blue;
-  text-decoration: underline;
+    color: #84c7ff;
+    text-decoration: underline;
     font-size: 15px;
+    font-weight: bold;
 }
 
 
@@ -82,12 +83,12 @@ input {
 /* BEGIN WRAPPER CODE justify
 Please do not edit this section directly, this code is generated automatically. Modify config.json instead */
 .centeredbox {
-  text-align: center;
+    text-align: center;
 }
 
 .leftalign {
-  display: inline-block;
-  text-align: left;
+    display: inline-block;
+    text-align: left;
 }
 
 /* END WRAPPER CODE */

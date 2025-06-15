@@ -1,12 +1,12 @@
-<!-------- Card Content, Hint, Tags & URL -------->
+<!-------- Card Content, Hint, Tags and URL -------->
 <div class="content_aligned">
-    <!------- Content & Hint ------->
+    <!------- Content and Hint ------->
     {{Front}}
 
     <br>
+
     {{#Hint}}
     <br>
-
     <div id="hint" class="hidden">
         <p class="trigger">[ click to show hint ]</p>
         <p class="payload">{{Hint}}</p>
@@ -17,7 +17,7 @@
 
 
 
-<!------- Tags & URL ------->
+<!------- Tags and URL ------->
 <div id="primary-tag-container" style="position: absolute; bottom: 0; left: 11%;">
     <div id="content_tag_left" class="tag primary left"></div>
 </div>
@@ -55,10 +55,10 @@
     }
 
     // parses a space delimited tag string, extracts “content” tags, and displays them in #content_tag_left
-    function displayTags(tags) {
-        const tagParts = tags.split(" ");
+    function displayTags() {
+        const tags = "{{Tags}}".split(" ");
         let content = [];
-        tagParts.forEach(tag => {
+        tags.forEach(tag => {
             const pieces = tag.split("::");
             if (pieces[0] === "content") content = pieces;
         });
@@ -70,11 +70,9 @@
     function setLinkText() {
         const anchor = document.querySelector("a");
         if (anchor) anchor.textContent = "Link";
-        anchor.style.fontWeight = "bold";
-        anchor.style.color = "#84c7ff"
     }
 
-    window._data = storeInput();
+    window.data = storeInput();
     placeCursor();
     setupHint();
     displayTags("{{Tags}}");
