@@ -54,19 +54,18 @@
         }
     }
 
-    // parses a space delimited tag string, extracts “content” tags, and displays them in #content_tag_left
-    function displayTags() {
-        const tags = "{{Tags}}".split(" ");
-        let content = [];
-        tags.forEach(tag => {
-            const pieces = tag.split("::");
-            if (pieces[0] === "content") content = pieces;
-        });
-        const elem = document.querySelector("#content_tag_left");
-        if (elem) elem.textContent = content.join(" - ").replace(/_/g, " ");
+    function prettifyTag(tag) {
+        return tag.split("::").join(" - ").replaceAll("_", " ");
     }
 
-    // set link text with similar formatting and colour scheme used in anki for consistent experience
+    // parse a space delimited tag string, extracts tags, and displays it in #content_tag_left
+    function displayTags() {
+        const tags = "{{Tags}}".split(" ");
+        const prettifiedTags = tags.map(tag => prettifyTag(tag)).join(", ");
+        document.getElementById("content_tag_left").textContent = prettifiedTags;
+    }
+
+    // set link text
     function setLinkText() {
         const anchor = document.querySelector("a");
         if (anchor) anchor.textContent = "Link";
