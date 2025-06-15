@@ -61,7 +61,7 @@
     // parse a space delimited tag string, extracts tags, and displays it in #content_tag_left
     function displayTags() {
         const tags = "{{Tags}}".split(" ");
-        const prettifiedTags = tags.map(tag => prettifyTag(tag)).join(", ");
+        const prettifiedTags = tags.map(prettifyTag).join(", ");
         document.getElementById("content_tag_left").textContent = prettifiedTags;
     }
 
@@ -74,6 +74,6 @@
     window.data = storeInput();
     placeCursor();
     setupHint();
-    displayTags("{{Tags}}");
+    displayTags();
     setLinkText();
 </script>
