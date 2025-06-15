@@ -1,6 +1,6 @@
 <!-- ===== CARD CONTENT, HINT, TAGS & URL ===== -->
 
-<div class="content_aligned";>
+<div class="content_aligned">
 
     <!------- Content & Hint ------->
 
@@ -37,11 +37,23 @@
 
 <!-- inputs -->
 <script>
-    var x = new Object();
-    var all = document.getElementsByTagName('input');
-    for (var i = 0; i < all.length; i++) {
-        all[i].addEventListener("input", function() { key=this.name; value=this.value; x[key] = value; });
+    function storeInput() {
+        const data = {};
+        const inputElements = document.getElementsByTagName('input');
+        for (let i = 0; i < inputElements.length; i++) {
+            const elem = inputElements[i];
+            elem.addEventListener("input", () => { data[elem.name] = elem.value; });
+        }
+        return data;
     }
+
+    // automatically place cursor onto first input field
+    function placeCursor() {
+      const firstElement = document.getElementsByTagName('input')[0];
+      if (firstElement) firstElement.focus();
+    }
+    window._data = storeInput();
+    placeCursor();
 </script>
 
 
