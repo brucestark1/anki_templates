@@ -2,12 +2,6 @@
 
 This is the simplest form of "code cards"; they're designed so you can create cards directly within the Anki interface.
 
-## Setup
-
-There is an [AutoHotKey](https://www.autohotkey.com/) script in this directory, called `anki_shortcuts`. If you aren't familiar with AutoHotKey, a quick summary: it allows you to program specific combinations of keys to perform certain scripted actions. In this case, the script assigns the shortcuts `Alt+s` to create spoilers, and `Alt+i` and `Alt+k` to create the elements of a code block.
-
-To run this script, you just have to download AutoHotKey from the link above, then download the AutoHotKey file in the directory. You need to double-click it to run the file (I recommend putting the file on your desktop so you can do this when your computer restarts). I think there's a way to make the script start from runtime automatically, but I haven't put in the time to find it!
-
 ## Creating cards
 
 Once you've run the AutoHotKey script, and created a card template with the right front/back/style component, you're ready to create cards.

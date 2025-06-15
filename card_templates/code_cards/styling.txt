@@ -1,14 +1,16 @@
+@import url("_editor_button_styles.css");
+
 /*  CARD  */
 
 
 .card {
-	font-family: Hind Regular;
-	line-height:1.5em;
-	font-size: 20px;
-	text-align: left;
-	color: black;
-	text-shadow: 1px 1px 2px #DDDDDD;
-	margin: 22px;
+    font-family: arial;
+    line-height:1.5em;
+    font-size: 18px;
+    text-align: left;
+    color: black;
+    text-shadow: 0px 0px 0px #DDDDDD;
+    margin: 22px;
 }
 
 
@@ -17,43 +19,11 @@
 
 .content_aligned
 {
-	position: absolute;
-	top: 6%;
-	left: 11%;
-	width: 76%;
-	height: 40%;
-}
-
-
-
-/*  TAGS  */
-
-.tag {
-	font-family: Alegreya Sans SC Regular;
-	text-shadow: 1px 1px 2px #BBBBBB;
-}
-.left {
-	float: left;
-	text-align: left; 
-}
-.right {
-	float: right;
-	text-align: right; 
-}
-.primary {
-	font-size: 17pt;
-	font-weight: bold;
-}
-.secondary {
-	font-size: 14pt;
-	color: #666;
-}
-.tertiary {
-	font-size: 13pt;
-	color: #999;
-}
-a {
-	color: black;
+    position: absolute;
+    top: 6%;
+    left: 11%;
+    width: 76%;
+    height: 70%;
 }
 
 
@@ -69,38 +39,55 @@ a {
 #hint.shown .payload { display: block; }
 
 
+/*  TAGS  */
 
-/*  SPOILERS  */
-
-.spoiler { 
-	font-style: normal;
-	color: black; 
-	text-shadow: none;
-	background-color:black;
-	padding: 0px 5px 0px;
+.tag {
+    font-family: arial;
+    margin-right: 5px;
+    font-size: 15px;
+}
+.left {
+    float: left;
+}
+.right {
+    float: right
 }
 
-.spoiler:hover {
-	background-color: white; 
-	text-shadow: 1px 1px 2px #DDDDDD;
-}
 
+/*  URL  */
+a {
+  color: blue;
+  text-decoration: underline;
+    font-size: 15px;
+}
 
 
 /* FILL IN TEXT */
 
 .exerciseprecontainer {
-    background-color: #DDDDDD;
+    background-color: #CCCCCC;
     padding: 0px 25px;
-    font-size: 18px;
-	line-height: 24px;
-	font-family: "Lucida Console";
-	color: #000000;
-	border-style: solid;
-	border-width: 10px;
-	border-color: black;
+    font-size: 16px;
+    line-height: 24px;
+    font-family: "MesloLGS NF";
+    color: #000000;
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
 }
 input {
-	font-family: "Lucida Console";
-    font-size: 18px;
+    font-family: "MesloLGS NF";
+    font-size: 16px;
 }
+/* BEGIN WRAPPER CODE justify
+Please do not edit this section directly, this code is generated automatically. Modify config.json instead */
+.centeredbox {
+  text-align: center;
+}
+
+.leftalign {
+  display: inline-block;
+  text-align: left;
+}
+
+/* END WRAPPER CODE */

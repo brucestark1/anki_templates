@@ -1,0 +1,83 @@
+<!-- ===== CARD CONTENT, HINT, TAGS & URL ===== -->
+
+<div class="content_aligned">
+
+    <!------- Content & Hint ------->
+
+    {{Front}}
+    <br>
+
+    {{#Hint}}
+        <br>
+        <div id="hint" class="hidden">
+            <p class="trigger">[ click to show hint ]</p>
+            <p class="payload">{{Hint}}</p>
+        </div>
+    {{/Hint}}
+
+</div>
+
+
+<!------- TAGS & URL ------->
+
+<div id="primary-tag-container" style="position: absolute; bottom: 0; left: 11%;">
+    <div id="ctag1" class="tag primary left"></div>
+    <div id="ctag2" class="tag secondary left"></div>
+    <div id="ctag3" class="tag tertiary left"></div>
+</div>
+
+<div id="url-container" style="position: absolute; bottom: 0; right: 11%;">
+    {{URL}}
+</div>
+
+
+
+
+<!-- ===== JAVASCRIPT ===== -->
+
+<!-- inputs -->
+<script>
+    function storeInput() {
+        const data = {};
+        const inputElements = document.getElementsByTagName('input');
+        for (let i = 0; i < inputElements.length; i++) {
+            const elem = inputElements[i];
+            elem.addEventListener("input", () => { data[elem.name] = elem.value; });
+        }
+        return data;
+    }
+
+    // automatically place cursor onto first input field
+    function placeCursor() {
+      const firstElement = document.getElementsByTagName('input')[0];
+      if (firstElement) firstElement.focus();
+    }
+    window._data = storeInput();
+    placeCursor();
+</script>
+
+
+<!-- hints -->
+<script>
+    var hint = document.getElementById('hint');
+    hint.addEventListener('touchstart', function() { this.setAttribute('class', 'shown'); });
+    hint.addEventListener('mousedown', function() { this.setAttribute('class', 'shown'); });
+</script>
+
+<!-- tags -->
+<script>
+    tag_string = "{{Tags}}".split(" ");
+    tag_obj = {};
+    tag_string.forEach(tag => {
+        tag_list = tag.split("::");
+        switch (tag_list[0]) {
+            default: tag_obj["content"] = tag_list; break;
+        }
+    })
+    document.querySelector("#ctag1").textContent = tag_obj["content"].join(" - ").split("_").join(" ");
+</script>
+
+<!-- URL -->
+<script>
+    document.querySelector("a").textContent = "Link"
+</script>
