@@ -33,12 +33,15 @@
 
 <!-------- JavaScript -------->
 <script>
-    // normalises smart quotes and strips all whitespace
+    // normalizes smart quotes and strips all whitespace
     function parseInput(str) {
-        return str.replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/\s+/g, "");
+        return str
+            .replace(/[“”]/g, '"')
+            .replace(/[‘’]/g, "'")
+            .replace(/\s+/g, "");
     }
 
-    // displays each input as correct (green) or wrong (red) based on whether the normalised answer matches expected
+    // displays each input as correct (green) or wrong (red) based on whether the normalized answer matches expected
     function checkAnswer(data) {
         document.querySelectorAll("input").forEach(input => {
             const trueAnswer = input.name ?? "";
