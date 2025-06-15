@@ -93,14 +93,14 @@ a {
     border-style: solid;
     border-width: 3px;
     color: #000000;
-    font-family: "MesloLGS NF";
+    font-family: monospace;
     font-size: 16px;
     line-height: 24px;
     padding: 0px 25px;
 }
 
 input {
-    font-family: "MesloLGS NF";
+    font-family: monospace;
     font-size: 16px;
 }
 

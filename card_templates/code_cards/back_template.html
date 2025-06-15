@@ -42,7 +42,7 @@
     }
 
     // displays each input as correct (green) or wrong (red) based on whether the normalized answer matches expected
-    function checkAnswer(data) {
+    function revealAnswer(data) {
         document.querySelectorAll("input").forEach(input => {
             const trueAnswer = input.name ?? "";
             const expected = trueAnswer.replace(/\s+/g, "");
@@ -73,7 +73,7 @@
         if (anchor) anchor.textContent = "Link";
     }
 
-    checkAnswer(window.data);
+    revealAnswer(window.data);
     displayTags();
     setLinkText();
 </script>
